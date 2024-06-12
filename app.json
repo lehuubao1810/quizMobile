@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "sQuizReboot",
-    "slug": "sQuizReboot",
+    "name": "SQuiz",
+    "slug": "SQuiz",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.lehuubao.SQuiz"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +32,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "507e6a1b-6e6c-48f3-ba47-3a9dd6d0fd23"
+      }
     }
   }
 }

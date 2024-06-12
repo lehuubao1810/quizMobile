@@ -1,9 +1,14 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs } from "expo-router";
+import React from "react";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+
+export const unstable_settings = {
+  // Ensure any route can link back to `/`
+  initialRouteName: "HomeScreen",
+};
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -11,25 +16,60 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
-      }}>
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="HomeScreen"
         options={{
-          title: 'Home',
+          title: "Home",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <TabBarIcon
+              name={focused ? "home" : "home-outline"}
+              color={color}
+            />
           ),
+          tabBarShowLabel: false,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="QuizRealTimeScreen"
         options={{
-          title: 'Explore',
+          title: "Quiz Real Time",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon
+              name={focused ? "book" : "book-outline"}
+              color={color}
+            />
           ),
+          tabBarShowLabel: false,
+        }}
+      />
+      <Tabs.Screen
+        name="StatScreen"
+        options={{
+          title: "Stat",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "bar-chart" : "bar-chart-outline"}
+              color={color}
+            />
+          ),
+          tabBarShowLabel: false,
+        }}
+      />
+      <Tabs.Screen
+        name="ProfileScreen"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "person" : "person-outline"}
+              color={color}
+            />
+          ),
+          tabBarShowLabel: false,
         }}
       />
     </Tabs>

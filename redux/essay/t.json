@@ -1,0 +1,31 @@
+{
+  "data_answer": {
+    "__v": 0,
+    "_id": "666290b458cc3fe43fce1275",
+    "content_answers": "",
+    "createAt": "2024-06-07T04:46:44.876Z",
+    "essay_exam_id": "66628f6058cc3fe43fce0e70",
+    "file_upload": [],
+    "status": "pending",
+    "student_id": "661dd5576912009186a88e5b",
+    "time_out": "2024-06-07T05:46:44.876Z"
+  },
+  "data_test": {
+    "__v": 0,
+    "_id": "66628f6058cc3fe43fce0e70",
+    "content": "",
+    "course_id": "6618ed94ffd445bae2327e5f",
+    "createAt": "2024-06-07T04:41:04.912Z",
+    "files": [],
+    "max_score": 10,
+    "teacher_id": "660e5a9fb2a2982affe24e6c",
+    "time_end": "2024-06-07T06:55:04.669Z",
+    "time_start": "2024-06-07T04:39:04.669Z",
+    "title": "test mb1",
+    "total_time": 60
+  },
+  "isFirst": false,
+  "message": "You have taken the test, continue to connect ",
+  "time_continue": "2024-06-07T04:52:07.898Z",
+  "total_time_left": 3276.982
+}
