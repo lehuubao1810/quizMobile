@@ -13,6 +13,10 @@ import { clearError, resetPassword } from "../../redux/auth/authSlice";
 import { LoadingBtn } from "../../components/common/LoadingBtn";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect } from "react";
+import { ThemedCard } from "@/components/default/ThemedCard";
+import { BtnBack } from "@/components/common/BtnBack";
+import { ThemedText } from "@/components/default/ThemedText";
+import { ThemedBtn } from "@/components/default/ThemedBtn";
 
 type FormData = {
   newPassword: string;
@@ -82,20 +86,15 @@ export default function ResetPasswordScreen() {
   return (
     <SafeAreaView style={tw`flex-1`}>
       <View style={tw`w-full pl-1 pt-[35px]`}>
-        <IconButton
-          icon="chevron-left"
-          size={35}
-          onPress={navigateBack}
-          // style={tw`bg-white`}
-        ></IconButton>
+        <BtnBack onPress={!loading ? navigateBack : () => {}} />
       </View>
       <View style={tw`flex items-center h-full px-8 `}>
-        <Text style={tw`text-2xl font-bold text-left mb-4 w-full`}>
+        <ThemedText style={tw`text-2xl font-bold text-left mb-4 w-full`}>
           Reset Password
-        </Text>
-        <Text style={tw`text-base text-left mb-4 w-full`}>
+        </ThemedText>
+        <ThemedText style={tw`text-base text-left mb-4 w-full`}>
           Please enter your new password
-        </Text>
+        </ThemedText>
         <Controller
           name="newPassword"
           control={control}
@@ -138,12 +137,12 @@ export default function ResetPasswordScreen() {
         {loading ? (
           <LoadingBtn />
         ) : (
-          <TouchableOpacity
+          <ThemedBtn
             style={tw`bg-zinc-800 p-3 rounded-lg w-full items-center`}
             onPress={onSubmit}
           >
             <Text style={tw`text-white font-bold`}>Confirm</Text>
-          </TouchableOpacity>
+          </ThemedBtn>
         )}
       </View>
     </SafeAreaView>

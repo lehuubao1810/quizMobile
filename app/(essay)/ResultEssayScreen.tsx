@@ -8,6 +8,8 @@ import { useAppDispatch } from "@/redux/hooks";
 export default function ResultEssayScreen() {
   const dispatch = useAppDispatch();
 
+  
+
   return (
     <SafeAreaView style={tw`flex-1`}>
       <View style={tw`justify-between p-8 h-full`}>

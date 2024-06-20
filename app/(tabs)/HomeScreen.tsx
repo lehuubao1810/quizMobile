@@ -5,6 +5,7 @@ import {
   FlatList,
   RefreshControl,
   TextInput,
+  useColorScheme,
 } from "react-native";
 import tw from "twrnc";
 import { Icon, Text } from "react-native-paper";
@@ -23,11 +24,14 @@ import { ListItem } from "../../components/common/ListItem";
 import { Course } from "../../types/Course/Course";
 import { FlashList } from "@shopify/flash-list";
 import { router, useNavigation } from "expo-router";
+import { Colors } from "@/constants/Colors";
+import { ThemedText } from "@/components/default/ThemedText";
+import Loader from "@/components/common/Loader";
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
 
-  const { courses, categoryCurrentId } = useAppSelector(
+  const { courses, categoryCurrentId, loading } = useAppSelector(
     (state) => state.coursesState
   );
   const { user } = useAppSelector((state) => state.authReducer);
@@ -123,104 +127,120 @@ export default function HomeScreen() {
     [navigation]
   );
 
+  const colorScheme = useColorScheme();
+
   return (
-    <View style={tw`flex-1 bg-white android:pb-[${340}px] pt-[45px]`}>
-      <View style={tw``}>
-        <TouchableOpacity
-          onPress={() => {
-            // navigation.navigate("TabNavigator", { screen: "ProfileScreen" });
-            router.push("ProfileScreen");
-          }}
-          style={tw`pl-6 pb-4 flex-row gap-2 items-center w-2/4`}
-        >
-          <Image
-            source={
-              user?.avatar
-                ? { uri: user.avatar }
-                : require("../../assets/images/avatardefault.png")
-            }
-            style={tw`w-10 h-10 rounded-full`}
-          />
-          <Text style={tw`text-center text-base font-bold`}>
-            Hi,{" "}
-            {user?.name.first_name
-              ? `${user?.name.first_name} ${user?.name.last_name}`
-              : "User Name"}
-          </Text>
-        </TouchableOpacity>
-        <View style={tw`pb-2 w-full px-6`}>
-          {/* input search course */}
-          <View
-            style={tw`flex-row items-center gap-4 rounded-lg border-2 border-gray-300 p-3`}
+    //android:pb-[${340}px]
+    <>
+      <View style={tw`flex-1 android:pb-[${160}px] pt-[45px]`}>
+        <View style={tw`flex-2`}>
+          <TouchableOpacity
+            onPress={() => {
+              // navigation.navigate("TabNavigator", { screen: "ProfileScreen" });
+              router.push("ProfileScreen");
+            }}
+            style={tw`pl-6 pb-4 flex-row gap-2 items-center w-2/4`}
           >
-            <View style={tw``}>
-              <Icon
-                source={"book-search-outline"}
-                size={28}
-                color={"#27272a"}
-              />
-            </View>
-            <View style={tw`flex-row items-center justify-between w-full `}>
-              <TextInput
-                style={tw``}
-                value={searchCourse}
-                onChangeText={handleSearchCourse}
-                placeholder={"Search course..."}
-                numberOfLines={1}
-              />
-              {/* Delete Icon*/}
-              {searchCourse !== "" && (
-                <TouchableOpacity
-                  style={tw`absolute right-10 p-2 bg-slate-200 rounded-full`}
-                  onPress={() => {
-                    handleSearchCourse("");
-                  }}
-                >
-                  <Icon source={"close"} size={18} color={"#27272a"} />
-                </TouchableOpacity>
-              )}
+            <Image
+              source={
+                user?.avatar
+                  ? { uri: user.avatar }
+                  : require("../../assets/images/avatardefault.png")
+              }
+              style={tw`w-10 h-10 rounded-full`}
+            />
+            <ThemedText style={tw`text-center text-base font-bold`}>
+              Hi,{" "}
+              {user?.name.first_name
+                ? `${user?.name.first_name} ${user?.name.last_name}`
+                : "User Name"}
+            </ThemedText>
+          </TouchableOpacity>
+          <View style={tw`pb-2 w-full px-6`}>
+            {/* input search course */}
+            <View
+              style={tw`flex-row items-center gap-4 rounded-lg border-2 border-gray-300 p-3 bg-white`}
+            >
+              <View style={tw``}>
+                <Icon
+                  source={"book-search-outline"}
+                  size={28}
+                  color={`${Colors[colorScheme ?? "light"].btn}`}
+                />
+              </View>
+              <View style={tw`flex-row items-center justify-between w-full `}>
+                <TextInput
+                  style={tw`w-full font-bold text-[${
+                    Colors[colorScheme ?? "light"].btn
+                  }]`}
+                  value={searchCourse}
+                  onChangeText={handleSearchCourse}
+                  placeholder={"Search course..."}
+                  numberOfLines={1}
+                  placeholderTextColor={`${
+                    Colors[colorScheme ?? "light"].input
+                  }`}
+                />
+                {/* Delete Icon*/}
+                {searchCourse !== "" && (
+                  <TouchableOpacity
+                    style={tw`absolute right-10 p-2 bg-slate-200 rounded-full`}
+                    onPress={() => {
+                      handleSearchCourse("");
+                    }}
+                  >
+                    <Icon
+                      source={"close"}
+                      size={18}
+                      color={`${Colors[colorScheme ?? "light"].btn}`}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
           </View>
-        </View>
-        {searchCourse.trim() === "" && (
-          <View style={tw`pl-6 py-2`}>
-            <FlatList
-              horizontal={true}
+          {searchCourse.trim() === "" && (
+            <View style={tw`pl-4`}>
+              <FlatList
+                style={tw``}
+                horizontal={true}
+                keyExtractor={(item) => item._id}
+                data={categories}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item }) => (
+                  <TabCategoryItem
+                    title={item.name}
+                    active={categoryCurrentId === item._id}
+                    onPress={() => handleFilter(item._id)}
+                  />
+                )}
+              />
+            </View>
+          )}
+          <View style={tw`ios:pb-36 min-h-full h-auto flex-2`}>
+            <FlashList
+              contentContainerStyle={tw`pt-2 px-6 pb-4`}
+              estimatedItemSize={200}
+              data={coursesFilter}
               keyExtractor={(item) => item._id}
-              data={categories}
-              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
               renderItem={({ item }) => (
-                <TabCategoryItem
-                  title={item.name}
-                  active={categoryCurrentId === item._id}
-                  onPress={() => handleFilter(item._id)}
+                <ListItem
+                  item={{
+                    ...item,
+                    isCourse: true,
+                  }}
+                  action={onHandleCourse}
                 />
               )}
             />
           </View>
-        )}
-        <View style={tw`ios:pb-36 min-h-full`}>
-          <FlashList
-            contentContainerStyle={tw`pt-2 px-6 pb-4`}
-            estimatedItemSize={200}
-            data={coursesFilter}
-            keyExtractor={(item) => item._id}
-            showsVerticalScrollIndicator={false}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            renderItem={({ item }) => (
-              <ListItem
-                item={{
-                  ...item,
-                  isCourse: true,
-                }}
-                action={onHandleCourse}
-              />
-            )}
-          />
         </View>
       </View>
-    </View>
+      <Loader isLoading={loading} />
+    </>
   );
 }

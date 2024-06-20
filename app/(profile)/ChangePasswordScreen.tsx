@@ -13,6 +13,9 @@ import { getData } from "../../utils/asyncStoreage";
 import { changePassword } from "../../redux/auth/authSlice";
 import { LoadingBtn } from "../../components/common/LoadingBtn";
 import { router } from "expo-router";
+import { BtnBack } from "@/components/common/BtnBack";
+import { ThemedText } from "@/components/default/ThemedText";
+import { ThemedBtn } from "@/components/default/ThemedBtn";
 
 type FormData = {
   password: string;
@@ -78,13 +81,8 @@ export default function ChangePasswordScreen() {
   return (
     <SafeAreaView style={tw`flex-1`}>
       <View style={tw`w-full pl-1 flex-row items-center`}>
-        <IconButton
-          icon="chevron-left"
-          size={35}
-          onPress={navigateBack}
-          // style={tw`bg-white`}
-        ></IconButton>
-        <Text style={tw`text-lg font-bold`}>Change Password</Text>
+        <BtnBack />
+        <ThemedText style={tw`text-lg font-bold`}>Change Password</ThemedText>
       </View>
       <View style={tw`flex items-center h-full px-8 pt-6`}>
         {/* <Text style={tw`text-base text-left mb-4 w-full`}>
@@ -145,12 +143,12 @@ export default function ChangePasswordScreen() {
           <Text style={tw`text-red-500 text-sm font-bold`}>{error}</Text>
         )}
 
-        <TouchableOpacity
-          style={tw`bg-zinc-800 p-3 rounded-lg w-full items-center`}
+        <ThemedBtn
+          style={tw`bg-zinc-800 p-4 rounded-lg w-full items-center`}
           onPress={onSubmit}
         >
           <Text style={tw`text-white font-bold`}>Confirm</Text>
-        </TouchableOpacity>
+        </ThemedBtn>
       </View>
     </SafeAreaView>
   );

@@ -3,20 +3,20 @@ import tw from "twrnc";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 
-export type ThemedBtnProps = TouchableOpacityProps & {
+export type ThemedCardProps = TouchableOpacityProps & {
   lightColor?: string;
   darkColor?: string;
 };
 
-export function ThemedBtn({
+export function ThemedCard({
   style,
   lightColor,
   darkColor,
   ...otherProps
-}: ThemedBtnProps) {
+}: ThemedCardProps) {
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
-    "btn"
+    "card"
   );
   console.log(backgroundColor);
   return (

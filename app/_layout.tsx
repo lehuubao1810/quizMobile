@@ -1,8 +1,4 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { router, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -17,6 +13,8 @@ import { store } from "@/redux/store";
 import { StatusBar } from "expo-status-bar";
 import { getData, saveObject } from "@/utils/asyncStoreage";
 import Toast from "react-native-toast-message";
+import { DarkTheme, DefaultTheme } from "@/constants/Themes";
+import { Colors } from "@/constants/Colors";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -61,6 +59,10 @@ export default function RootLayout() {
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
+        <StatusBar
+        backgroundColor={`${Colors[colorScheme ?? "light"].background}`}
+        style={`${colorScheme === "dark" ? "light" : "dark"}`}
+      />
         <Toast />
       </ThemeProvider>
     </Provider>

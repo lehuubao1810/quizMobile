@@ -15,6 +15,9 @@ import { LoadingBtn } from "../../components/common/LoadingBtn";
 import { router, useNavigation } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getData } from "@/utils/asyncStoreage";
+import { ThemedText } from "@/components/default/ThemedText";
+import { ThemedCard } from "@/components/default/ThemedCard";
+import { ThemedBtn } from "@/components/default/ThemedBtn";
 
 type FormData = {
   email: string;
@@ -96,13 +99,15 @@ const LoginScreen = () => {
 
   return (
     <SafeAreaView style={tw`flex-1`}>
-      <View style={tw`flex items-center h-full px-8 pt-10 bg-white`}>
+      <View style={tw`flex items-center h-full px-8 pt-10`}>
         <Image
           source={require("../../assets/images/logo.png")}
           style={tw`w-40 h-40`}
           resizeMode="contain"
         />
-        <Text style={tw`text-2xl font-bold text-left mb-4 w-full`}>Login</Text>
+        <ThemedText style={tw`text-2xl font-bold text-left mb-4 w-full`}>
+          Login
+        </ThemedText>
         <View style={tw`w-full`}>
           <Controller
             name="email"
@@ -139,12 +144,14 @@ const LoginScreen = () => {
             )}
           />
           {/* <Pressable> */}
-          <Text
-            onPress={navigateForgotPassword}
-            style={tw`w-full text-right mb-4`}
+
+          <TouchableOpacity
+            onPress={!loading ? navigateForgotPassword : () => {}}
           >
-            Forgot password?
-          </Text>
+            <ThemedText style={tw`w-full text-right mb-4 text-sm font-bold`}>
+              Forgot password?
+            </ThemedText>
+          </TouchableOpacity>
         </View>
         {/* </Pressable> */}
         <View style={tw`w-full mt-4`}>
@@ -152,22 +159,23 @@ const LoginScreen = () => {
           {loading ? (
             <LoadingBtn />
           ) : (
-            <TouchableOpacity
+            <ThemedBtn
               style={tw`bg-zinc-800 p-3 rounded-lg w-full items-center`}
               onPress={() => onSubmit()}
             >
               <Text style={tw`text-white font-bold text-base text-center`}>
                 LOGIN
               </Text>
-            </TouchableOpacity>
+            </ThemedBtn>
           )}
           <View style={tw`flex-row justify-center mt-2`}>
-            <Text style={tw`text-base`}>Don't have an account?</Text>
-            <TouchableOpacity onPress={navigateRegister}>
-              <Text style={tw`text-zinc-800 font-bold text-base`}>
-                {" "}
+            <ThemedText style={tw`text-base mr-1`}>
+              Don't have an account?
+            </ThemedText>
+            <TouchableOpacity onPress={!loading ? navigateRegister : () => {}}>
+              <ThemedText style={tw`font-bold text-base underline`}>
                 Register
-              </Text>
+              </ThemedText>
             </TouchableOpacity>
           </View>
         </View>

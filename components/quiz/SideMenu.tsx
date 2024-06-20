@@ -3,11 +3,14 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 import tw from "twrnc";
 
 import { Quiz } from "../../types/Exam/Quiz";
+import { ThemedText } from "../default/ThemedText";
+import { Colors } from "@/constants/Colors";
 
 type Props = {
   isShowListQuestion: boolean;
@@ -30,6 +33,7 @@ export const SideMenu: React.FC<Props> = ({
   showModalLeaveQuiz,
   positionX,
 }) => {
+  const colorScheme = useColorScheme();
   return (
     <Animated.View
       style={
@@ -40,6 +44,7 @@ export const SideMenu: React.FC<Props> = ({
           width: "100%",
           height: "100%",
           left: 0,
+          top: 0,
           transform: [
             {
               translateX: positionX,
@@ -50,13 +55,17 @@ export const SideMenu: React.FC<Props> = ({
       onTouchStart={hideSideMenu}
     >
       <View
-        style={tw`w-4/6 h-full bg-white p-4 justify-between shadow-2xl`}
+        style={tw`w-4/6 h-full p-4 bg-[${
+          Colors[colorScheme ?? "light"].card
+        }] justify-between shadow-2xl`}
         onTouchStart={(e) => {
           e.stopPropagation();
         }}
       >
         <View style={tw``}>
-          <Text style={tw`font-bold text-base mb-4`}>List question</Text>
+          <ThemedText style={tw`font-bold text-base mb-4`}>
+            List question
+          </ThemedText>
           <View style={tw`flex flex-row flex-wrap gap-4`}>
             {quiz.dataExam &&
               quiz.dataExam.map((question, index) => (
@@ -66,15 +75,29 @@ export const SideMenu: React.FC<Props> = ({
                     setCurrentQuestion(index);
                     hideSideMenu();
                   }}
-                  style={tw`border-2 border-slate-200 rounded-lg p-4 mb-4
-                ${index === currentQuestion ? "border-sky-600" : ""} 
-                ${checkIsSelectedinQuiz(question._id) ? "bg-blue-400" : ""}`}
+                  style={tw`border-2 border-slate-300 rounded-lg p-4 mb-4
+                ${
+                  index === currentQuestion
+                    ? `${
+                        colorScheme === "dark"
+                          ? `border-[${Colors.light.background}] bg-[#333]`
+                          : `border-[${Colors.dark.background}] bg-[#ccc]`
+                      }`
+                    : ""
+                }
+                ${
+                  checkIsSelectedinQuiz(question._id)
+                    ? `bg-[${Colors[colorScheme ?? "light"].btn}]`
+                    : ""
+                }`}
                 >
-                  <Text
-                    style={tw`text-lg font-bold ${checkIsSelectedinQuiz(question._id) ? "text-white" : ""}`}
+                  <ThemedText
+                    style={tw`text-lg font-bold ${
+                      checkIsSelectedinQuiz(question._id) ? `text-white` : ""
+                    }`}
                   >
                     {index + 1}
-                  </Text>
+                  </ThemedText>
                 </TouchableOpacity>
               ))}
           </View>

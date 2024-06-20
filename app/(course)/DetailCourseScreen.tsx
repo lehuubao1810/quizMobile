@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ScrollView,
   RefreshControl,
+  useColorScheme,
 } from "react-native";
 import tw from "twrnc";
 import { Icon, IconButton, Text } from "react-native-paper";
@@ -21,6 +22,9 @@ import { showToast } from "../../utils/toast";
 import { FlashList } from "@shopify/flash-list";
 import { getDetailCourse } from "../../redux/course/courseSlice";
 import { router, useLocalSearchParams } from "expo-router";
+import { Colors } from "@/constants/Colors";
+import { BtnBack } from "@/components/common/BtnBack";
+import { ThemedText } from "@/components/default/ThemedText";
 
 export default function DetailCourseScreen() {
   // const route = useRoute<HomeStackRouteScreenProps<"DetailCourseScreen">>();
@@ -89,17 +93,13 @@ export default function DetailCourseScreen() {
   }, []);
 
   const insets = useSafeAreaInsets();
+  const colorScheme = useColorScheme();
 
   return (
-    <SafeAreaView style={tw`flex-1 bg-white`}>
+    <SafeAreaView style={tw`flex-1`}>
       <View style={tw`w-full pl-1 flex-row items-center`}>
-        <IconButton
-          icon="chevron-left"
-          size={35}
-          onPress={navigateBack}
-          // style={tw`bg-white`}
-        ></IconButton>
-        <Text style={tw`text-lg font-bold`}>{courseName}</Text>
+        <BtnBack />
+        <ThemedText style={tw`text-lg font-bold`}>{courseName}</ThemedText>
       </View>
       <ScrollView
         style={tw`flex-1`}
@@ -111,7 +111,7 @@ export default function DetailCourseScreen() {
         <View style={tw`android:pb-[${insets.bottom}] min-h-65`}>
           <View style={tw`px-6`}>
             <View style={tw`flex-row items-center justify-between my-4`}>
-              <Text style={tw`text-lg font-bold`}>Quiz Exam</Text>
+              <ThemedText style={tw`text-lg font-bold`}>Quiz Exam</ThemedText>
               {quizs.length !== 0 && (
                 <TouchableOpacity
                   style={tw`flex-row items-center gap-2`}
@@ -132,7 +132,7 @@ export default function DetailCourseScreen() {
             {quizs.length !== 0 ? (
               <FlashList
                 estimatedItemSize={200}
-                contentContainerStyle={tw`ios:max-h-65 py-2`}
+                contentContainerStyle={tw`ios:max-h-65 py-2 pl-2`}
                 data={quizs}
                 keyExtractor={(item) => item._id}
                 horizontal={true}
@@ -158,9 +158,9 @@ export default function DetailCourseScreen() {
               </View>
             )}
           </View>
-          <View style={tw`px-6 min-h-65`}>
+          <View style={tw`px-6 min-h-65 pb-4`}>
             <View style={tw`flex-row items-center justify-between my-4`}>
-              <Text style={tw`text-lg font-bold`}>Essay Exam</Text>
+              <ThemedText style={tw`text-lg font-bold`}>Essay Exam</ThemedText>
               {essays.length !== 0 && (
                 <TouchableOpacity
                   style={tw`flex-row items-center gap-2`}
@@ -184,7 +184,7 @@ export default function DetailCourseScreen() {
             {essays.length !== 0 ? (
               <FlashList
                 estimatedItemSize={200}
-                contentContainerStyle={tw`py-2`}
+                contentContainerStyle={tw`py-2 pl-2`}
                 data={essays}
                 keyExtractor={(item) => item._id}
                 horizontal={true}
@@ -195,7 +195,7 @@ export default function DetailCourseScreen() {
                       _id: item._id,
                       title: item.title,
                       course_name: item.course_name,
-                      // status: item.status,
+                      status: item.isFirst ? "null" : "pending",
                     }}
                     action={onHandleEssay}
                     time={dayjs(item.time_end).format("HH:mm:ss DD/MM")}

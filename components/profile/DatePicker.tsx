@@ -1,4 +1,10 @@
-import { Button, Text, TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from "react-native";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -6,6 +12,7 @@ import { useState } from "react";
 import tw from "twrnc";
 import { Icon } from "react-native-paper";
 import dayjs from "dayjs";
+import { Colors } from "@/constants/Colors";
 
 type Props = {
   date: Date;
@@ -28,14 +35,26 @@ export const DatePicker = ({ date, setDate }: Props) => {
     setShow(true);
   };
 
+  const colorScheme = useColorScheme();
+
   return (
     <View style={tw`w-full`}>
       <TouchableOpacity
         onPress={showPicker}
-        style={tw`flex-row items-center gap-4 rounded-lg border-2 border-gray-300 p-4 w-full`}
+        style={tw`flex-row items-center gap-4 rounded-lg border-2 border-gray-300 p-4 w-full bg-white`}
       >
-        <Icon source="calendar" size={22} color={"#000"} />
-        <Text>{dayjs(date).format("DD/MM/YYYY")}</Text>
+        <Icon
+          source="calendar"
+          size={22}
+          color={`${Colors[colorScheme ?? "light"].btn}`}
+        />
+        <Text
+          style={tw`text-[${
+            Colors[colorScheme ?? "light"].btn
+          }] font-bold`}
+        >
+          {dayjs(date).format("DD/MM/YYYY")}
+        </Text>
       </TouchableOpacity>
       {show && (
         <DateTimePicker

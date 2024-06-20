@@ -1,4 +1,9 @@
-import { SafeAreaView, TouchableOpacity, View } from "react-native";
+import {
+  SafeAreaView,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from "react-native";
 import tw from "twrnc";
 import { OtpInput } from "react-native-otp-entry";
 import { IconButton, Text } from "react-native-paper";
@@ -8,6 +13,10 @@ import { clearError, sendOTP, verifyOTP } from "../../redux/auth/authSlice";
 import { LoadingBtn } from "../../components/common/LoadingBtn";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { BtnBack } from "@/components/common/BtnBack";
+import { ThemedText } from "@/components/default/ThemedText";
+import { Colors } from "@/constants/Colors";
+import { showToast } from "@/utils/toast";
 
 export default function VerificationOtpScreen() {
   const { email } = useLocalSearchParams() as { email: string };
@@ -54,6 +63,7 @@ export default function VerificationOtpScreen() {
       })
       .catch((error) => {
         console.log(error);
+        showToast("error", error);
       });
   };
 
@@ -67,30 +77,32 @@ export default function VerificationOtpScreen() {
     });
   }, [navigation]);
 
+  const colorScheme = useColorScheme();
+
   return (
     <SafeAreaView style={tw`flex-1`}>
       <View style={tw`w-full pl-1 pt-[35px]`}>
-        <IconButton
-          icon="chevron-left"
-          size={35}
-          onPress={navigateBack}
-          // style={tw`bg-white`}
-        ></IconButton>
+        <BtnBack />
       </View>
       <View style={tw`px-8`}>
-        <Text style={tw`text-2xl font-bold text-left mb-4 w-full`}>
+        <ThemedText style={tw`text-2xl font-bold text-left mb-4 w-full`}>
           Verification OTP
-        </Text>
-        <Text style={tw`text-base text-left mb-4 w-full`}>
+        </ThemedText>
+        <ThemedText style={tw`text-base text-left mb-4 w-full`}>
           We've sent a verification code to{" "}
-          <Text style={tw`font-bold text-zinc-500`}>{String(email)}</Text>.
-          Please enter it
-        </Text>
+          <ThemedText style={tw`font-bold text-zinc-400`}>
+            {String(email)}
+          </ThemedText>
+          . Please enter it
+        </ThemedText>
         <OtpInput
           numberOfDigits={6}
-          focusColor={"#000"}
+          focusColor={`${Colors[colorScheme ?? "light"].tabCategory}`}
           onFilled={(otp) => {
             handleVerifyOTP(otp);
+          }}
+          theme={{
+            pinCodeTextStyle: tw`text-white font-bold`,
           }}
         />
 
@@ -99,22 +111,15 @@ export default function VerificationOtpScreen() {
             <LoadingBtn />
           ) : time?.getSeconds() === 0 ? (
             <TouchableOpacity onPress={resendOTP}>
-              <Text style={tw`text-base text-zinc-800`}>Resend OTP</Text>
+              <ThemedText style={tw`text-base`}>Resend OTP</ThemedText>
             </TouchableOpacity>
           ) : (
             <>
-              <Text style={tw`text-base`}>Resend OTP in </Text>
-              <Text style={tw`text-base text-zinc-800`}>
-                {time?.getSeconds()} s
-              </Text>
+              <ThemedText style={tw`text-base`}>Resend OTP in </ThemedText>
+              <ThemedText style={tw`text-base font-bold`}>{time?.getSeconds()} s</ThemedText>
             </>
           )}
         </View>
-        {error && (
-          <Text style={tw`text-red-500 text-sm font-bold text-center mt-4`}>
-            {error}
-          </Text>
-        )}
       </View>
     </SafeAreaView>
   );

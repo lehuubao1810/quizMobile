@@ -40,7 +40,7 @@ const ResultScreen = () => {
 
   return (
     <SafeAreaView style={tw`flex-1`}>
-      <View style={tw`bg-white px-6 items-center`}>
+      <View style={tw`px-6 items-center`}>
         <Text style={tw`text-xl font-bold mb-8`}>Result</Text>
         <View style={tw`flex-row justify-between gap-4 items-end`}>
           <View>

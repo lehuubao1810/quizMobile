@@ -2,10 +2,11 @@ import { Platform, SafeAreaView, View } from "react-native";
 import tw from "twrnc";
 import { IconButton, Text } from "react-native-paper";
 
-
 import { useAppSelector } from "../../redux/hooks";
 import { router, useLocalSearchParams } from "expo-router";
 import { Chart } from "@/components/stat/Chart";
+import { BtnBack } from "@/components/common/BtnBack";
+import { ThemedText } from "@/components/default/ThemedText";
 
 export default function DetailStatScreen() {
   const navigateBack = () => {
@@ -29,27 +30,38 @@ export default function DetailStatScreen() {
     <SafeAreaView style={tw`flex-1`}>
       <View style={tw`min-h-full`}>
         <View style={tw`w-full pl-1 flex-row items-center`}>
-          <IconButton
-            icon="chevron-left"
-            size={35}
-            onPress={navigateBack}
-            // style={tw`bg-white`}
-          ></IconButton>
-          <Text style={tw`text-lg font-bold`}>{exam.title}</Text>
+          <BtnBack />
+          <ThemedText style={tw`text-lg font-bold`}>{exam.title}</ThemedText>
         </View>
         <View style={tw`px-6 `}>
-          <View style={tw`min-h-50 my-6 w-full`}>
+          <View style={tw`min-h-50 my-6 w-full justify-center items-center`}>
             <Chart
-              data={chart.slice(1, 11)}
+              data={
+                // chart.slice(1, 11)
+                // test//
+                [
+                  { label: "1", value: 2 },
+                  { label: "2", value: 3 },
+                  { label: "3", value: 4 },
+                  { label: "4", value: 5 },
+                  { label: "5", value: 14 },
+                  { label: "6", value: 18 },
+                  { label: "7", value: 5 },
+                  { label: "8", value: 4 },
+                  { label: "9", value: 2 },
+                  { label: "10", value: 1 },
+                ]
+              }
+              myScore={exam.score ?? 0}
             />
-            <Text
-              style={tw`text-base font-bold text-zinc-500 mt-4 text-center`}
+            <ThemedText
+              style={tw`text-base font-bold mt-4 text-center`}
             >
               Stat score of quiz
-            </Text>
+            </ThemedText>
           </View>
           <View style={tw`items-center justify-center w-full mt-10`}>
-            <Text style={tw`text-xl font-bold`}>Your score: {exam.score}</Text>
+            <ThemedText style={tw`text-xl font-bold`}>Your score: {exam.score}</ThemedText>
           </View>
         </View>
       </View>

@@ -15,7 +15,6 @@ export type Quiz = Exam & {
   quiz_answer_id: string;
   quiz_exam_id: string;
   timeStart: Date;
-  status?: string;
 };
 
 export type Answer = {

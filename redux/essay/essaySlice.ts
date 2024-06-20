@@ -51,10 +51,12 @@ export const getEssayByID = createAsyncThunk(
       );
       console.log("essay by id", response.data);
 
-      return {
+      const payload = {
         ...response.data,
         total_time_left: response.data.total_time_left.toFixed(0),
       };
+
+      return payload;
     } catch (_err) {
       const error = _err as AxiosError;
       const data = error.response?.data as ErrorResponse;
@@ -99,6 +101,7 @@ export const postAnswerEssay = createAsyncThunk(
 
       console.log("submit ok", response);
     } catch (_err) {
+      console.log(_err);
       const error = _err as AxiosError;
       console.log(error);
       const data = error.response?.data as ErrorResponse;

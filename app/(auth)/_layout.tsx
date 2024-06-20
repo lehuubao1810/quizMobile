@@ -3,6 +3,8 @@ import { StatusBar } from "expo-status-bar";
 
 import Loader from "@/components/common/Loader";
 import { useAppSelector } from "@/redux/hooks";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "react-native";
 
 export const unstable_settings = {
   // Ensure any route can link back to `/`
@@ -14,12 +16,14 @@ const AuthLayout = () => {
     (state) => state.authReducer
   );
 
+  const colorScheme = useColorScheme();
+
   return (
     <>
       <Stack
         screenOptions={{
           contentStyle: {
-            backgroundColor: "#fff",
+            // backgroundColor: "#fff",
           },
         }}
       >
@@ -56,7 +60,10 @@ const AuthLayout = () => {
       </Stack>
 
       {/* <Loader isLoading={loading} /> */}
-      <StatusBar backgroundColor="#161622" style="light" />
+      <StatusBar
+        backgroundColor={`${Colors[colorScheme ?? "light"].background}`}
+        style={`${colorScheme === "dark" ? "light" : "dark"}`}
+      />
     </>
   );
 };

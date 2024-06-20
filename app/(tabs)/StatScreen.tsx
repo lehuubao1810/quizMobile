@@ -11,6 +11,7 @@ import { FlashList } from "@shopify/flash-list";
 import { showToast } from "../../utils/toast";
 import { router } from "expo-router";
 import Loader from "@/components/common/Loader";
+import { ThemedText } from "@/components/default/ThemedText";
 
 export default function StatScreen() {
   const dispatch = useAppDispatch();
@@ -54,12 +55,12 @@ export default function StatScreen() {
 
   return (
     <SafeAreaView style={tw`flex-1`}>
-      <View style={tw`bg-white pt-[45px]`}>
-        <Text style={tw`text-xl font-bold text-center mb-4`}>
+      <View style={tw`pt-[45px]`}>
+        <ThemedText style={tw`text-xl font-bold text-center mb-4`}>
           List Completed Exam
-        </Text>
+        </ThemedText>
 
-        <View style={tw`android:pb-6 ios:pb-36 min-h-full`}>
+        <View style={tw`flex-2 android:pb-6 ios:pb-36 min-h-full h-auto`}>
           <FlashList
             contentContainerStyle={tw`px-6 pb-16`}
             data={exams}

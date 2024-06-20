@@ -23,7 +23,7 @@ const Loader = ({ isLoading }: Props) => {
     >
       <ActivityIndicator
         animating={isLoading}
-        color={Colors[colorScheme ?? "light"].tint}
+        color={Colors[colorScheme ?? "light"].tabCategory}
         size={osName === "ios" ? "large" : 50}
       />
     </View>

@@ -19,9 +19,11 @@ import { postAnswerEssay } from "../../redux/essay/essaySlice";
 import { showToast } from "../../utils/toast";
 import { ModalConfirm } from "../../components/common/ModalConfirm";
 import { router } from "expo-router";
+import { EssayFileModal } from "@/components/exam/EssayFileModal";
+import { BtnBack } from "@/components/common/BtnBack";
+import { ThemedText } from "@/components/default/ThemedText";
 
 export default function EssayScreen() {
-
   const dispatch = useAppDispatch();
 
   const [answer, setAnswer] = useState("");
@@ -39,16 +41,17 @@ export default function EssayScreen() {
   const [progress, setProgress] = useState(initialProgress);
   const [color, setColor] = useState("rgb(59 130 246)");
   const [time, setTime] = useState({
-    minutes: Math.floor((essayCurrent?.total_time_left / 60)) ?? 1,
-    seconds: Math.floor((essayCurrent?.total_time_left % 60)) ?? 0,
+    minutes: Math.floor(essayCurrent?.total_time_left / 60) ?? 1,
+    seconds: Math.floor(essayCurrent?.total_time_left % 60) ?? 0,
   });
   const total_time = time.minutes;
 
   useEffect(() => {
-    console.log("essayCurrent", essayCurrent?.total_time_left/60);
+    console.log("essayCurrent", essayCurrent?.total_time_left / 60);
   }, [essayCurrent]);
 
   const [isShowModal, setIsShowModal] = useState(false);
+  const [isShowListFileModal, setIsShowListFileModal] = useState(false);
 
   const pickFile = async () => {
     // const result = await DocumentPicker.getDocumentAsync({
@@ -64,7 +67,7 @@ export default function EssayScreen() {
       showToast("error", "File is not selected");
       return;
     }
-    console.log(file);
+    console.log("essay file", file.assets[0].uri);
 
     setfileUriAnswer(file.assets[0].uri);
     showToast("success", "File is selected");
@@ -150,27 +153,30 @@ export default function EssayScreen() {
             contentModal={"Are you sure you want to submit the answer?"}
           />
         )}
+        {isShowListFileModal && (
+          <EssayFileModal
+            isShowModal={isShowListFileModal}
+            setIsShowModal={setIsShowListFileModal}
+            contentModal={essayCurrent.files}
+          />
+        )}
         <View>
           <View
-            style={tw`w-full pl-1 pr-8 flex-row items-center justify-between`}
+            style={tw`w-full pl-1 pr-3 flex-row items-center justify-between`}
           >
-            <View style={tw`flex-row items-center`}>
-              <IconButton
-                icon="chevron-left"
-                size={35}
-                onPress={() => {
-                  // navigation.goBack();
-                  router.back();
-                }}
-                // style={tw`bg-white`}
-              ></IconButton>
-              <Text style={tw`text-lg font-bold`}>{essayCurrent.title}</Text>
-            </View>
-            <View>
-              <Text style={tw`text-lg font-bold`}>
+            <View style={tw`flex-row items-center justify-between w-full`}>
+              <BtnBack/>
+              <ThemedText style={tw`text-lg font-bold`}>
                 {time.minutes}:{time.seconds < 10 ? "0" : ""}
                 {time.seconds}
-              </Text>
+              </ThemedText>
+              <IconButton
+                icon="download"
+                size={28}
+                onPress={() => {
+                  setIsShowListFileModal(true);
+                }}
+              />
             </View>
           </View>
 
@@ -178,7 +184,7 @@ export default function EssayScreen() {
             <Progress.Bar progress={progress} width={null} color={color} />
           </View>
           <Text style={tw`text-xl font-bold text-zinc-500 text-center`}>
-            Đề bài
+            {essayCurrent.title}
           </Text>
           <View style={tw`items-center px-6`}>
             <RenderHtml
@@ -196,7 +202,7 @@ export default function EssayScreen() {
               multiline
               numberOfLines={15}
               // maxLength={40}
-              style={tw`border-2 border-slate-200 rounded-lg p-3 mb-4 min-h-60`}
+              style={tw`border-2 border-slate-300 rounded-lg p-3 mb-4 min-h-60 bg-white`}
               onChangeText={setAnswer}
               value={answer}
               placeholder="Your answer here..."
@@ -207,7 +213,7 @@ export default function EssayScreen() {
               onPress={pickFile}
             >
               <Text style={tw`text-lg font-bold text-center text-white`}>
-                Upload Image Answer
+                Upload File Answer
               </Text>
             </TouchableOpacity>
           </View>
@@ -216,7 +222,7 @@ export default function EssayScreen() {
             onPress={() => setIsShowModal(true)}
           >
             <Text style={tw`text-lg font-bold text-center text-white`}>
-              Submit
+              {essayCurrent?.isFirst ? "Submit" : "Update"}
             </Text>
           </TouchableOpacity>
         </ScrollView>

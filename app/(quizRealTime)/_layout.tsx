@@ -1,15 +1,17 @@
+import { Colors } from "@/constants/Colors";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useColorScheme } from "react-native";
 
 const QuizRealTimeLayout = () => {
-
+  const colorScheme = useColorScheme();
   return (
     <>
       <Stack
         screenOptions={{
           contentStyle: {
-            backgroundColor: "#fff",
-            paddingTop: 35
+            // backgroundColor: "#fff",
+            paddingTop: 32
           },
         }}
       >
@@ -33,7 +35,10 @@ const QuizRealTimeLayout = () => {
         />
       </Stack>
 
-      <StatusBar backgroundColor="#161622" style="light" />
+      <StatusBar
+        backgroundColor={`${Colors[colorScheme ?? "light"].background}`}
+        style={`${colorScheme === "dark" ? "light" : "dark"}`}
+      />
     </>
   );
 };

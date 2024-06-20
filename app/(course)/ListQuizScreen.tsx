@@ -11,6 +11,8 @@ import { getData } from "../../utils/asyncStoreage";
 import { showToast } from "../../utils/toast";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
+import { BtnBack } from "@/components/common/BtnBack";
+import { ThemedText } from "@/components/default/ThemedText";
 
 export default function ListQuizScreen() {
   const navigateBack = () => {
@@ -42,12 +44,8 @@ export default function ListQuizScreen() {
     <View style={tw`flex-1`}>
       <View style={tw``}>
         <View style={tw`w-full pl-1 flex-row items-center`}>
-          <IconButton
-            icon="chevron-left"
-            size={35}
-            onPress={navigateBack}
-          ></IconButton>
-          <Text style={tw`text-lg font-bold`}>List Quiz Exam</Text>
+          <BtnBack/>
+          <ThemedText style={tw`text-lg font-bold`}>List Quiz Exam</ThemedText>
         </View>
         <View style={tw`ios:pb-36 min-h-full`}>
           <FlashList

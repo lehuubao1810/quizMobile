@@ -9,6 +9,10 @@ import { clearError, sendOTP } from "../../redux/auth/authSlice";
 import { LoadingBtn } from "../../components/common/LoadingBtn";
 import { router, useNavigation } from "expo-router";
 import { useEffect } from "react";
+import { ThemedCard } from "@/components/default/ThemedCard";
+import { BtnBack } from "@/components/common/BtnBack";
+import { ThemedText } from "@/components/default/ThemedText";
+import { ThemedBtn } from "@/components/default/ThemedBtn";
 
 type FormData = {
   email: string;
@@ -61,21 +65,16 @@ export default function ForgotPasswordScreen() {
   return (
     <SafeAreaView style={tw`flex-1`}>
       <View style={tw`w-full pl-1 pt-[35px]`}>
-        <IconButton
-          icon="chevron-left"
-          size={35}
-          onPress={navigateBack}
-          // style={tw`bg-white`}
-        ></IconButton>
+        <BtnBack onPress={!loading ? navigateBack : () => {}} />
       </View>
       <View style={tw`flex items-center h-full px-8 `}>
-        <Text style={tw`text-2xl font-bold text-left mb-4 w-full`}>
+        <ThemedText style={tw`text-2xl font-bold text-left mb-4 w-full`}>
           Forgot Password
-        </Text>
-        <Text style={tw`text-base text-left mb-4 w-full`}>
+        </ThemedText>
+        <ThemedText style={tw`text-base text-left mb-4 w-full`}>
           Please enter your email address below and we'll send you a link to
           reset your password.
-        </Text>
+        </ThemedText>
         <Controller
           name="email"
           control={control}
@@ -102,12 +101,12 @@ export default function ForgotPasswordScreen() {
         {loading ? (
           <LoadingBtn />
         ) : (
-          <TouchableOpacity
+          <ThemedBtn
             style={tw`bg-zinc-800 p-3 rounded-lg w-full items-center`}
             onPress={onSubmit}
           >
             <Text style={tw`text-white font-bold`}>Send Email</Text>
-          </TouchableOpacity>
+          </ThemedBtn>
         )}
       </View>
     </SafeAreaView>

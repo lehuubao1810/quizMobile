@@ -22,6 +22,9 @@ import dayjs from "dayjs";
 import { router } from "expo-router";
 import { DatePicker } from "@/components/profile/DatePicker";
 import { showToast } from "@/utils/toast";
+import { BtnBack } from "@/components/common/BtnBack";
+import { ThemedText } from "@/components/default/ThemedText";
+import { ThemedBtn } from "@/components/default/ThemedBtn";
 
 type FormData = {
   first_name: string;
@@ -115,13 +118,8 @@ export default function EditProfileScreen() {
   return (
     <SafeAreaView style={tw`flex-1`}>
       <View style={tw`w-full pl-1 flex-row items-center`}>
-        <IconButton
-          icon="chevron-left"
-          size={35}
-          onPress={navigateBack}
-          // style={tw`bg-white`}
-        ></IconButton>
-        <Text style={tw`text-lg font-bold`}>Update Profile</Text>
+        <BtnBack />
+        <ThemedText style={tw`text-lg font-bold`}>Update Profile</ThemedText>
       </View>
       <View style={tw`flex items-center h-full px-8`}>
         <EditAvatar selectImage={selectImage} />
@@ -196,12 +194,12 @@ export default function EditProfileScreen() {
             {error}
           </Text>
         )}
-        <TouchableOpacity
+        <ThemedBtn
           style={tw`bg-zinc-800 p-4 rounded-lg w-full items-center mt-4`}
           onPress={onSubmit}
         >
           <Text style={tw`text-white font-bold text-base`}>Confirm</Text>
-        </TouchableOpacity>
+        </ThemedBtn>
       </View>
     </SafeAreaView>
   );

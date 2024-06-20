@@ -14,6 +14,10 @@ import { clearError, register } from "../../redux/auth/authSlice";
 import { LoadingBtn } from "../../components/common/LoadingBtn";
 import { router, useNavigation } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { BtnBack } from "@/components/common/BtnBack";
+import { ThemedText } from "@/components/default/ThemedText";
+import { ThemedCard } from "@/components/default/ThemedCard";
+import { ThemedBtn } from "@/components/default/ThemedBtn";
 
 type FormData = {
   email: string;
@@ -80,19 +84,14 @@ export default function RegisterScreen() {
 
   return (
     <SafeAreaView style={tw`flex-1`}>
-      <View style={tw`bg-white`}>
+      <View style={tw``}>
         <View style={tw`w-full pl-1 `}>
-          <IconButton
-            icon="chevron-left"
-            size={35}
-            onPress={navigateBack}
-            // style={tw`bg-white`}
-          ></IconButton>
+          <BtnBack />
         </View>
         <View style={tw`flex items-center h-full px-8`}>
-          <Text style={tw`text-2xl font-bold text-left mb-4 w-full`}>
+          <ThemedText style={tw`text-2xl font-bold text-left mb-4 w-full`}>
             Register
-          </Text>
+          </ThemedText>
           <View style={tw`flex items-center w-full`}>
             <Controller
               name="email"
@@ -103,7 +102,7 @@ export default function RegisterScreen() {
                   onChangeText={onChange}
                   value={value}
                   error={errors.email ? errors.email?.message : undefined}
-                  style={tw`mb-4 w-full`}
+                  style={tw`mb-2 w-full`}
                   icon="email"
                   placeholder="abc@email.com"
                 />
@@ -157,20 +156,19 @@ export default function RegisterScreen() {
             {loading ? (
               <LoadingBtn />
             ) : (
-              <TouchableOpacity
+              <ThemedBtn
                 style={tw`bg-zinc-800 p-3 rounded-lg w-full items-center`}
                 onPress={() => onSubmit()}
               >
                 <Text style={tw`text-white font-bold text-base`}>REGISTER</Text>
-              </TouchableOpacity>
+              </ThemedBtn>
             )}
             <View style={tw`flex-row mt-8`}>
-              <Text style={tw`text-base`}>Already have an account?</Text>
+              <ThemedText style={tw`text-base mr-1`}>Already have an account?</ThemedText>
               <TouchableOpacity onPress={navigateLogin}>
-                <Text style={tw`text-zinc-800 font-bold text-base`}>
-                  {" "}
+                <ThemedText style={tw`font-bold text-base underline`}>
                   Login
-                </Text>
+                </ThemedText>
               </TouchableOpacity>
             </View>
           </View>

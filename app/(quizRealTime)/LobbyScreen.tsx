@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { socket } from "../../constants/socket";
 import { router, useLocalSearchParams } from "expo-router";
+import { ThemedText } from "@/components/default/ThemedText";
 
 const LobbyScreen = () => {
   const { user } = useAppSelector((state) => state.authReducer);
@@ -31,8 +32,8 @@ const LobbyScreen = () => {
 
   return (
     <SafeAreaView style={tw`flex-1`}>
-      <View style={tw`bg-white px-6 items-center`}>
-        <Text style={tw`text-xl font-bold mb-4`}>Lobby</Text>
+      <View style={tw`px-6 items-center`}>
+        <ThemedText style={tw`text-xl font-bold mb-4`}>Lobby</ThemedText>
         <View style={tw`mb-6`}>
           <Image
             source={
@@ -43,13 +44,13 @@ const LobbyScreen = () => {
             }
             style={tw`w-24 h-24 mx-auto my-2 rounded-full`}
           />
-          <Text style={tw`text-center font-bold uppercase text-lg`}>
-            {user?.name.first_name || "No name"}
-          </Text>
+          <ThemedText style={tw`text-center font-bold uppercase text-lg`}>
+            {`${user?.name.first_name} ${user?.name.last_name}` || "No name"}
+          </ThemedText>
         </View>
-        <Text style={tw`text-center font-bold text-base text-zinc-500`}>
+        <ThemedText style={tw`text-center font-bold text-base`}>
           You are in! {"\n"}See your nickname on screen?
-        </Text>
+        </ThemedText>
       </View>
     </SafeAreaView>
   );

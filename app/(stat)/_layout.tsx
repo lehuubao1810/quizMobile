@@ -3,20 +3,21 @@ import { StatusBar } from "expo-status-bar";
 
 import Loader from "@/components/common/Loader";
 import { useAppSelector } from "@/redux/hooks";
-
+import { useColorScheme } from "react-native";
+import { Colors } from "@/constants/Colors";
 
 const StatLayout = () => {
-  const { loading } = useAppSelector(
-    (state) => state.statState
-  );
+  const { loading } = useAppSelector((state) => state.statState);
+
+  const colorScheme = useColorScheme();
 
   return (
     <>
       <Stack
         screenOptions={{
           contentStyle: {
-            backgroundColor: "#fff",
-            paddingTop: 35
+            // backgroundColor: "#fff",
+            paddingTop: 32,
           },
         }}
       >
@@ -29,7 +30,10 @@ const StatLayout = () => {
       </Stack>
 
       <Loader isLoading={loading} />
-      <StatusBar backgroundColor="#161622" style="light" />
+      <StatusBar
+        backgroundColor={`${Colors[colorScheme ?? "light"].background}`}
+        style={`${colorScheme === "dark" ? "light" : "dark"}`}
+      />
     </>
   );
 };

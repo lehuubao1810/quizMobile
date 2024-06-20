@@ -1,4 +1,11 @@
-import { Animated, SafeAreaView, ScrollView, TouchableOpacity, View } from "react-native";
+import {
+  Animated,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from "react-native";
 import tw from "twrnc";
 import { IconButton, Text } from "react-native-paper";
 
@@ -10,8 +17,10 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { Answer, Quiz } from "../../types/Exam/Quiz";
 import { postAnswer, submitQuiz } from "../../redux/quiz/quizsSlice";
 import RenderHtml from "react-native-render-html";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { changeCategory } from "@/redux/course/courseSlice";
+import { ThemedText } from "@/components/default/ThemedText";
+import { Colors } from "@/constants/Colors";
 
 export default function QuizScreen() {
   // const route = useRoute<HomeStackRouteScreenProps<"QuizScreen">>();
@@ -96,34 +105,30 @@ export default function QuizScreen() {
   };
 
   const handleSelectAnswer = (answer: number) => {
-    // check if question is selected in quizCurrent? => update answer
+    updateAnswer(answer);
     if (
       answers.some(
-        (ans) =>
-          ans.question_id === quizCurrent?.dataExam[currentQuestion]._id &&
-          ans.answer === null
+        (ans) => ans.question_id === quizCurrent?.dataExam[currentQuestion]._id
       )
     ) {
-      updateAnswer(answer);
-
       setAnswers((prev) =>
         prev.map((ans) => {
           if (ans.question_id === quizCurrent?.dataExam[currentQuestion]._id) {
-            return { ...ans, answer: answer };
+            return { ...ans, answer };
+          } else {
+            return ans;
           }
-          return ans;
         })
       );
-      return;
+    } else {
+      setAnswers((prev) => [
+        ...prev,
+        {
+          question_id: quizCurrent?.dataExam[currentQuestion]._id,
+          answer: answer,
+        },
+      ]);
     }
-    updateAnswer(answer);
-    setAnswers((prev) => [
-      ...prev,
-      {
-        question_id: quizCurrent?.dataExam[currentQuestion]._id,
-        answer: answer,
-      },
-    ]);
   };
 
   // check if question is selected in quizCurrent?
@@ -150,7 +155,7 @@ export default function QuizScreen() {
   const handleLeaveQuiz = () => {
     // navigation.navigate("TabNavigator", { screen: "HomeScreen" });
     router.push("HomeScreen");
-    dispatch(changeCategory(""))
+    dispatch(changeCategory(""));
   };
 
   const handleSubmitBtn = () => {
@@ -221,6 +226,32 @@ export default function QuizScreen() {
     }).start();
   };
 
+  // Navigation
+  const navigation = useNavigation();
+
+  useEffect(
+    () =>
+      navigation.addListener("beforeRemove", (e) => {
+        const data = e.data.action.payload as {
+          name: string;
+          params: {
+            screen: string;
+          };
+        };
+        console.log("prevent back", data?.params.screen === "LoginScreen");
+        console.log("prevent back 2", e);
+
+        if (data?.params.screen === "LoginScreen") {
+          return;
+        }
+        // Prevent default
+        e.preventDefault();
+      }),
+    [navigation]
+  );
+
+  const colorScheme = useColorScheme();
+
   return (
     <SafeAreaView style={tw`flex-1`}>
       {isShowModal && (
@@ -253,24 +284,24 @@ export default function QuizScreen() {
             setIsShowListQuestion(true);
             showSideMenu();
           }}
-          //   style={tw`bg-white`}
+          iconColor={`${Colors[colorScheme ?? "light"].btn}`}
         ></IconButton>
-        <Text style={tw`text-lg font-bold`}>
+        <ThemedText style={tw`text-lg font-bold`}>
           {time.minutes}:{time.seconds < 10 ? "0" : ""}
           {time.seconds}
-        </Text>
-        <Text style={tw`text-lg font-bold`}>{`${currentQuestion + 1}/${
+        </ThemedText>
+        <ThemedText style={tw`text-lg font-bold`}>{`${currentQuestion + 1}/${
           quizCurrent?.dataExam.length
-        }`}</Text>
+        }`}</ThemedText>
       </View>
       <View style={tw`px-8 mb-4`}>
         <Progress.Bar progress={progress} width={null} color={color} />
       </View>
 
-      <ScrollView style={tw`px-8 flex-2 ios:justify-between`}>
-        <View>
+      <ScrollView style={tw`flex-2`}>
+        <View style={tw`px-8`}>
           <View
-            style={tw`w-full min-h-50 border-2 border-slate-200 p-4 rounded-lg`}
+            style={tw`w-full min-h-50 border-2 border-slate-200 p-4 rounded-lg bg-white shadow-md`}
           >
             {/* <Text style={tw`text-lg font-bold`}>
             {quizCurrent?.dataExam[currentQuestion]?.question} 
@@ -283,7 +314,9 @@ export default function QuizScreen() {
               }}
             />
           </View>
-          <Text style={tw`text-lg font-bold my-2 mt-4`}>Answer</Text>
+          <ThemedText style={tw`text-lg font-bold my-2 mt-4`}>
+            Answer
+          </ThemedText>
           <View style={tw``}>
             {quizCurrent?.dataExam.length !== 0 &&
               quizCurrent?.dataExam[currentQuestion].answer.map(
@@ -293,50 +326,59 @@ export default function QuizScreen() {
                     onPress={() => {
                       handleSelectAnswer(index);
                     }}
-                    style={tw`border-2 border-slate-200 rounded-lg p-4 mb-4 ${
-                      checkIsSelectedAnswer(index) ? "bg-blue-500" : ""
+                    style={tw`border-2 border-slate-200 rounded-lg p-4 mb-4 bg-[${
+                      Colors[colorScheme ?? "light"].card
+                    }] border-slate-300 shadow-md ${
+                      checkIsSelectedAnswer(index)
+                        ? "bg-slate-200 border-zinc-600"
+                        : ""
                     }`}
                   >
-                    {/* <Text
-                    style={tw`text-lg font-bold ${checkIsSelectedAnswer(index) ? "text-white" : ""}`}
-                  >
-                    {answer.content}
-                    
-                  </Text> */}
                     <RenderHtml
                       contentWidth={100}
                       source={{
                         html: answer.content,
                       }}
+                      baseStyle={tw`${
+                        checkIsSelectedAnswer(index)
+                          ? `text-[${Colors.light.text}]`
+                          : `text-[${Colors[colorScheme ?? "light"].text}]`
+                      }`}
                     />
                   </TouchableOpacity>
                 )
               )}
           </View>
         </View>
-        <View>
+        <View style={tw`px-8 pb-8`}>
           {currentQuestion === quizCurrent?.dataExam.length - 1 ? (
-            <TouchableOpacity
-              onPress={handleSubmitBtn}
-              style={tw`border-2 border-slate-200 rounded-lg p-3 mt-4 bg-blue-500 ${
-                quizCurrent?.dataExam.length === lengthAnswers()
-                  ? ""
-                  : "bg-white"
-              }`}
-            >
-              <Text
-                style={tw`text-lg font-bold text-center text-white  ${
+            <View>
+              <TouchableOpacity
+                onPress={handleSubmitBtn}
+                style={tw`border-2 border-slate-200 rounded-lg p-3 mt-4 bg-[${
+                  Colors[colorScheme ?? "light"].btn
+                }] ${
                   quizCurrent?.dataExam.length === lengthAnswers()
                     ? ""
-                    : "text-slate-800"
+                    : "bg-white"
                 }`}
               >
-                Submit
-              </Text>
-            </TouchableOpacity>
-          ) : (
+                <Text
+                  style={tw`text-lg font-bold text-center text-white  ${
+                    quizCurrent?.dataExam.length === lengthAnswers()
+                      ? ""
+                      : "text-black"
+                  }`}
+                >
+                  Submit
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : currentQuestion === 0 ? (
             <TouchableOpacity
-              style={tw`border-2 border-slate-200 rounded-lg p-3 mt-4 bg-zinc-800 ${
+              style={tw`border-2 border-slate-200 rounded-lg p-3 mt-4 bg-[${
+                Colors[colorScheme ?? "light"].btn
+              }] ${
                 checkIsSelectedinQuiz(
                   quizCurrent?.dataExam[currentQuestion]?._id
                 )
@@ -359,6 +401,47 @@ export default function QuizScreen() {
                 Next question
               </Text>
             </TouchableOpacity>
+          ) : (
+            <View style={tw`flex-row gap-4`}>
+              <TouchableOpacity
+                style={tw`border-2 border-slate-200 rounded-lg p-3 mt-4 bg-[${
+                  Colors[colorScheme ?? "light"].btn
+                }]`}
+                onPress={() => {
+                  setCurrentQuestion((prev) => prev - 1);
+                }}
+              >
+                <Text style={tw`text-lg font-bold text-center text-white`}>
+                  Prev question
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={tw`border-2 border-slate-200 rounded-lg p-3 mt-4 bg-[${
+                  Colors[colorScheme ?? "light"].btn
+                }] ${
+                  checkIsSelectedinQuiz(
+                    quizCurrent?.dataExam[currentQuestion]?._id
+                  )
+                    ? ""
+                    : "bg-white"
+                }`}
+                onPress={() => {
+                  setCurrentQuestion((prev) => prev + 1);
+                }}
+              >
+                <Text
+                  style={tw`text-lg font-bold text-center text-white ${
+                    checkIsSelectedinQuiz(
+                      quizCurrent?.dataExam[currentQuestion]?._id
+                    )
+                      ? ""
+                      : "text-slate-800"
+                  }`}
+                >
+                  Next question
+                </Text>
+              </TouchableOpacity>
+            </View>
           )}
         </View>
       </ScrollView>

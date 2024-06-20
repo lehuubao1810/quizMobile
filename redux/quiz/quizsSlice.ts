@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Answer, Quiz, ResultQuiz } from "../../types/Exam/Quiz";
 import { FulfilledAction, PendingAction, RejectedAction } from "../store";
-import { quizs } from "../../constants/quizs";
 import api from "../../utils/api";
 import { AxiosError } from "axios";
 import { getData } from "../../utils/asyncStoreage";
