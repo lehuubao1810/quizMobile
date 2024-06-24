@@ -18,6 +18,7 @@ export const Colors = {
     btn: "#28292e",
     tabCategory: "#fff",
     input: "#ccc",
+    tabBar: "#fff"
   },
   dark: {
     text: "#ECEDEE",
@@ -30,5 +31,6 @@ export const Colors = {
     btn: "#00CFE8",
     tabCategory: "#fff",
     input: "#CBE4DE",
+    tabBar: "#1c1f2e"
   },
 };

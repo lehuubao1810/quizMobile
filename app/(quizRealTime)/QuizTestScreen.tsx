@@ -8,6 +8,7 @@ import { useRoute } from "@react-navigation/native";
 import { socket } from "../../constants/socket";
 import { Icon } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
+import { ThemedText } from "@/components/default/ThemedText";
 
 const QuizTestScreen = () => {
   const { user } = useAppSelector((state) => state.authReducer);
@@ -97,9 +98,9 @@ const QuizTestScreen = () => {
     <SafeAreaView style={tw`flex-1`}>
       {countdown === 0 ? (
         <View style={tw`flex-1 justify-center items-center`}>
-          <Text style={tw`text-2xl font-bold mb-12`}>
+          <ThemedText style={tw`text-2xl font-bold mb-12`}>
             Question {currentQuestionIndex}
-          </Text>
+          </ThemedText>
           <View style={tw`flex-row w-full px-6 justify-between mb-6`}>
             <TouchableOpacity
               style={tw`bg-red-400 rounded-lg p-4 mb-2 w-[45%] h-36 items-center justify-center 

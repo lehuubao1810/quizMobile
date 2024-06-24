@@ -1,7 +1,8 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, useColorScheme, View } from "react-native";
 import tw from "twrnc";
 import { ThemedText } from "../default/ThemedText";
+import { Colors } from "@/constants/Colors";
 
 type Props = {
   data: { label: string; value: number }[];
@@ -10,6 +11,7 @@ type Props = {
 
 export const Chart: React.FC<Props> = (props: Props) => {
   console.log("data", props);
+  const colorScheme = useColorScheme();
 
   const labels = ["0", ...props.data.map((item) => item.label)];
   const maxValue = Math.max(...props.data.map((item) => item.value));
@@ -19,7 +21,7 @@ export const Chart: React.FC<Props> = (props: Props) => {
       return "";
     }
     if (parseInt(value) === Math.ceil(props.myScore)) {
-      return "bg-[#00CFE8]";
+      return `bg-[${Colors[colorScheme ?? "light"].btn}]`;
     } else {
       return "bg-white";
     }

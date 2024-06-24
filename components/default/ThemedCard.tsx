@@ -18,8 +18,7 @@ export function ThemedCard({
     { light: lightColor, dark: darkColor },
     "card"
   );
-  console.log(backgroundColor);
   return (
-    <TouchableOpacity style={[style, { backgroundColor }]} {...otherProps} />
+    <TouchableOpacity style={[{ backgroundColor }, style]} {...otherProps} />
   );
 }

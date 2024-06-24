@@ -13,7 +13,7 @@ export const LoadingBtn = (props: Props) => {
     <View style={tw`py-3 ${props.style ? props.style : ""}`}>
       <ActivityIndicator
         animating={true}
-        color={`${Colors[colorScheme ?? "light"].tabCategory}`}
+        color={`${Colors[colorScheme ?? "light"].btn}`}
       />
     </View>
   );

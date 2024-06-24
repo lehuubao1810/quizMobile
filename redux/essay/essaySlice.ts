@@ -8,6 +8,7 @@ import { ErrorResponse } from "../quiz/quizsSlice";
 type EssayAnswer = {
   _id: string;
   content_answers: string;
+  file_upload: string[];
 };
 
 type essaysState = {
@@ -24,6 +25,7 @@ const initialState: essaysState = {
   essayAnswerCurrent: {
     _id: "",
     content_answers: "",
+    file_upload: [],
   } as EssayAnswer,
   loading: false,
   error: undefined,
@@ -56,6 +58,14 @@ export const getEssayByID = createAsyncThunk(
         total_time_left: response.data.total_time_left.toFixed(0),
       };
 
+      if (!response.data.isFirst) {
+        const essayAnswerCurrent = {
+          _id: response.data.data_answer._id,
+          content_answers: response.data.data_answer.content_answers,
+        };
+        return { ...payload, essayAnswerCurrent: essayAnswerCurrent };
+      }
+
       return payload;
     } catch (_err) {
       const error = _err as AxiosError;
@@ -87,9 +97,54 @@ export const postAnswerEssay = createAsyncThunk(
           type,
         } as any);
       }
-      console.log("form answer", data);
+      console.log("form answer", answerForm);
       const response = await api.post(
         `/essay-exam-answer/submit-essay-exam-answer/${data.id}`,
+        answerForm,
+        {
+          headers: {
+            Authorization: `Bearer ${data.accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("submit ok", response);
+    } catch (_err) {
+      console.log(_err);
+      const error = _err as AxiosError;
+      console.log(error);
+      const data = error.response?.data as ErrorResponse;
+      return rejectWithValue(data);
+    }
+  }
+);
+
+export const updateAnswerEssay = createAsyncThunk(
+  "updateAnswer/essays",
+  async (
+    data: { answer: string; id: string; accessToken?: string; uri?: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const answerForm = new FormData();
+      console.log("data file", data.uri);
+      answerForm.append("content_answers", data.answer);
+      if (data.uri) {
+        const filename = data.uri.split("/").pop();
+        const match = /\.(\w+)$/.exec(filename!);
+        const type = match
+          ? `application/${match[1]}`
+          : `application/octet-stream`;
+        answerForm.append("file_essay_answer", {
+          uri: data.uri,
+          name: filename,
+          type,
+        } as any);
+      }
+      console.log("form answer", answerForm);
+      const response = await api.put(
+        `/essay-exam-answer/update-essay-exam-answer/${data.id}`,
         answerForm,
         {
           headers: {

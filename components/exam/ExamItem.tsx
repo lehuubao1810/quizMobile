@@ -28,7 +28,7 @@ type Props = {
 export const ExamItem: React.FC<Props> = ({ item, action, time }: Props) => {
   return (
     <ThemedCard
-      style={tw`bg-white mr-6 rounded-lg p-3 shadow-md`}
+      style={tw`mr-6 rounded-lg p-3 shadow-md`}
       // activeOpacity={0.6}
       // underlayColor="#f8fafc"
       onPress={() => action(item._id)}

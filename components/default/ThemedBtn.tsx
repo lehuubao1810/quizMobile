@@ -18,7 +18,6 @@ export function ThemedBtn({
     { light: lightColor, dark: darkColor },
     "btn"
   );
-  console.log(backgroundColor);
   return (
     <TouchableOpacity style={[style, { backgroundColor }]} {...otherProps} />
   );
