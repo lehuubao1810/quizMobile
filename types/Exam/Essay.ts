@@ -5,4 +5,5 @@ export type Essay = Exam & {
   total_time_left: number;
   files?: string[];
   isFirst?: boolean;
+  isSubmit?: boolean;
 };

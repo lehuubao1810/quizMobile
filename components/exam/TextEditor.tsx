@@ -13,15 +13,21 @@ export default function TextEditor({ html, setAnswer }: Props) {
 
   return (
     <SafeAreaView
-      style={tw`shadow-md bg-white min-h-[300px] mb-4 max-w-full overflow-hidden rounded-lg`}
+      style={tw`shadow-md bg-white h-[300px] mb-8 max-w-full overflow-hidden rounded-lg`}
     >
       <QuillEditor
         style={styles.editor}
         ref={_editor}
         initialHtml={html}
         onHtmlChange={({ html }) => {
-          console.log("html changed", html);
+          // console.log("html changed", html);
           setAnswer(html);
+        }}
+        quill={{
+          placeholder: "Write your answer here...",
+          modules: {
+            toolbar: false,
+          },
         }}
       />
       <View style={tw``}>

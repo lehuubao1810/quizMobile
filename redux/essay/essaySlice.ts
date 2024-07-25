@@ -57,16 +57,29 @@ export const getEssayByID = createAsyncThunk(
         ...response.data,
         total_time_left: response.data.total_time_left.toFixed(0),
       };
+      const fileUpload = response.data.data_answer.file_upload as string[];
+
+      console.log("file", fileUpload.length);
 
       if (!response.data.isFirst) {
-        const essayAnswerCurrent = {
-          _id: response.data.data_answer._id,
-          content_answers: response.data.data_answer.content_answers,
-        };
-        return { ...payload, essayAnswerCurrent: essayAnswerCurrent };
+        if (
+          fileUpload.length === 0 &&
+          response.data.data_answer.content_answers === ""
+        ) {
+          return {
+            ...payload,
+            isSubmit: false,
+          };
+        } else {
+          console.log("isSubmit", true);
+          return { ...payload, isSubmit: true };
+        }
       }
 
-      return payload;
+      return {
+        ...payload,
+        isSubmit: false,
+      };
     } catch (_err) {
       const error = _err as AxiosError;
       const data = error.response?.data as ErrorResponse;
@@ -83,7 +96,7 @@ export const postAnswerEssay = createAsyncThunk(
   ) => {
     try {
       const answerForm = new FormData();
-
+      console.log("data", data);
       answerForm.append("content_answers", data.answer);
       if (data.uri) {
         const filename = data.uri.split("/").pop();
@@ -172,11 +185,17 @@ const essaysSlice = createSlice({
     setEssays: (state, action) => {
       state.essays = action.payload;
     },
+    updateIsSubmit: (state, action) => {
+      state.essayCurrent.isSubmit = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getEssayByID.fulfilled, (state, action) => {
-        state.essayCurrent = action.payload.data_test;
+        state.essayCurrent = {
+          ...action.payload.data_test,
+          isSubmit: action.payload.isSubmit,
+        };
         state.essayCurrent.total_time_left = action.payload.total_time_left;
         if (action.payload.isFirst) {
           state.essayAnswerCurrent._id = action.payload._id;
@@ -209,7 +228,7 @@ const essaysSlice = createSlice({
   },
 });
 
-export const { setEssays } = essaysSlice.actions;
+export const { setEssays, updateIsSubmit } = essaysSlice.actions;
 
 const essaysState = essaysSlice.reducer;
 export default essaysState;

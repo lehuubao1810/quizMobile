@@ -19,7 +19,7 @@ const Loader = ({ isLoading }: Props) => {
   const colorScheme = useColorScheme();
   return (
     <View
-      style={tw`absolute flex justify-center items-center w-full h-full z-10 bg-slate-500/50`}
+      style={tw`absolute flex justify-center items-center w-full h-full z-10 bg-slate-500/50 top-0 left-0`}
     >
       <ActivityIndicator
         animating={isLoading}

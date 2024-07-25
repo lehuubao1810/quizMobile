@@ -19,6 +19,7 @@ import { getData } from "../../utils/asyncStoreage";
 import {
   postAnswerEssay,
   updateAnswerEssay,
+  updateIsSubmit,
 } from "../../redux/essay/essaySlice";
 import { showToast } from "../../utils/toast";
 import { ModalConfirm } from "../../components/common/ModalConfirm";
@@ -102,7 +103,7 @@ export default function EssayScreen() {
       if (prevProgress <= 0.1) {
         setColor("rgb(247, 85, 85)");
       }
-      // console.log("remain", prevProgress - 1 / (total_time * 60));
+      console.log("remain", prevProgress - 1 / (total_time * 60));
       // console.log("sub", 1 / (total_time * 60));
       return prevProgress - 1 / (total_time * 60);
     });
@@ -141,7 +142,10 @@ export default function EssayScreen() {
       .unwrap()
       .then(() => {
         // navigation.navigate("ResultEssayScreen");
-        router.push("ResultEssayScreen");
+        // router.push("ResultEssayScreen");
+        showToast("success", "Submit answer successfully");
+        dispatch(updateIsSubmit(true));
+        setIsShowModal(false);
       })
       .catch((err) => {
         showToast("error", err.message);
@@ -164,7 +168,9 @@ export default function EssayScreen() {
       .unwrap()
       .then(() => {
         // navigation.navigate("ResultEssayScreen");
-        router.push("ResultEssayScreen");
+        // router.replace("ResultEssayScreen");
+        showToast("success", "Update answer successfully");
+        setIsShowModal(false);
       })
       .catch((err) => {
         showToast("error", err.message);
@@ -192,7 +198,13 @@ export default function EssayScreen() {
 
   useLayoutEffect(() => {
     if (time.minutes === 0 && time.seconds === 0) {
-      handleSubmit();
+      if (!essayCurrent?.isSubmit) {
+        handleSubmit();
+        router.replace("ResultEssayScreen");
+      } else {
+        handleUpdate();
+        router.replace("ResultEssayScreen");
+      }
       return;
       // handleUpdate();
     }
@@ -203,19 +215,17 @@ export default function EssayScreen() {
 
   return (
     <SafeAreaView style={tw`flex-1`}>
-      <View style={tw`h-full flex-2`}>
+      <View style={tw`h-full flex-1`}>
         {isShowModal && (
           <ModalConfirm
             isShowModal={isShowModal}
             setIsShowModal={setIsShowModal}
             handleConfirm={async () => {
-              // if (essayCurrent?.isFirst) {
-              //   await handleSubmit();
-              // } else {
-              //   await handleUpdate();
-              // }
-              await handleUpdate();
-              // await handleSubmit();
+              if (!essayCurrent?.isSubmit) {
+                await handleSubmit();
+              } else {
+                await handleUpdate();
+              }
             }}
             contentModal={"Are you sure you want to submit the answer?"}
           />
@@ -253,9 +263,6 @@ export default function EssayScreen() {
           <View style={tw`px-8 mb-2`}>
             <Progress.Bar progress={progress} width={null} color={color} />
           </View>
-          <ThemedText style={tw`text-xl font-bold text-center`}>
-            {essayCurrent.title}
-          </ThemedText>
           <View style={tw`items-center px-6`}>
             <RenderHtml
               contentWidth={100}
@@ -266,67 +273,57 @@ export default function EssayScreen() {
             />
           </View>
         </View>
-        <ScrollView style={tw`flex-3`}>
+        <ScrollView style={tw`flex-1`}>
           <View style={tw`px-8`}>
-            {/* <TextInput
-              editable
-              multiline
-              numberOfLines={15}
-              // maxLength={40}
-              style={tw`border-2 border-slate-300 rounded-lg p-3 mb-4 min-h-60 bg-white`}
-              onChangeText={setAnswer}
-              value={answer}
-              placeholder="Your answer here..."
-              keyboardType="default"
-            /> */}
             <TextEditor html={answer} setAnswer={setAnswer} />
-            <View style={tw`flex-row justify-between`}>
-              <ThemedCard
-                style={tw`shadow-md rounded-full mb-4 w-14 h-14 items-center justify-center`}
-                onPress={pickFile}
-              >
-                <Icon
-                  source="upload"
-                  size={28}
-                  color={`${Colors[colorScheme ?? "light"].text}`}
-                />
-              </ThemedCard>
-              <ThemedCard
-                style={tw`shadow-md rounded-lg mb-4 flex-row items-center justify-between px-4 gap-2
+            <View>
+              <View style={tw`flex-row justify-between`}>
+                <ThemedCard
+                  style={tw`shadow-md rounded-full mb-4 w-14 h-14 items-center justify-center`}
+                  onPress={pickFile}
+                >
+                  <Icon
+                    source="upload"
+                    size={28}
+                    color={`${Colors[colorScheme ?? "light"].text}`}
+                  />
+                </ThemedCard>
+                <ThemedCard
+                  style={tw`shadow-md rounded-lg mb-4 flex-row items-center justify-between px-4 gap-2
                   ${
                     fileUriAnswer
                       ? `bg-[${Colors[colorScheme ?? "light"].btn}]`
                       : `bg-[${Colors[colorScheme ?? "light"].card}]`
                   }
                   `}
-                onPress={() => {
-                  handleModalFile(true);
-                }}
+                  onPress={() => {
+                    handleModalFile(true);
+                  }}
+                >
+                  <Icon
+                    source="file"
+                    size={28}
+                    color={`${
+                      fileUriAnswer
+                        ? `#fff`
+                        : `${Colors[colorScheme ?? "light"].text}`
+                    }`}
+                  />
+                  <ThemedText style={tw`${fileUriAnswer ? `text-white` : ``}`}>
+                    File upload preview
+                  </ThemedText>
+                </ThemedCard>
+              </View>
+              <ThemedBtn
+                style={tw`rounded-lg p-3 mb-4`}
+                onPress={() => setIsShowModal(true)}
               >
-                <Icon
-                  source="file"
-                  size={28}
-                  color={`${
-                    fileUriAnswer
-                      ? `#fff`
-                      : `${Colors[colorScheme ?? "light"].text}`
-                  }`}
-                />
-                <ThemedText style={tw`${fileUriAnswer ? `text-white` : ``}`}>
-                  File upload preview
-                </ThemedText>
-              </ThemedCard>
+                <Text style={tw`text-lg text-white font-bold text-center`}>
+                  {!essayCurrent?.isSubmit ? "Submit" : "Update"}
+                </Text>
+              </ThemedBtn>
             </View>
           </View>
-          <ThemedBtn
-            style={tw`rounded-lg p-3 mb-4 mx-8`}
-            onPress={() => setIsShowModal(true)}
-          >
-            <Text style={tw`text-lg text-white font-bold text-center`}>
-              {/* {essayCurrent?.isFirst ? "Submit" : "Update"} */}
-              Submit
-            </Text>
-          </ThemedBtn>
         </ScrollView>
       </View>
     </SafeAreaView>

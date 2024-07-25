@@ -130,10 +130,9 @@ export default function HomeScreen() {
   const colorScheme = useColorScheme();
 
   return (
-    //android:pb-[${340}px]
     <>
-      <View style={tw`flex-1 android:pb-[${160}px] pt-[45px]`}>
-        <View style={tw`flex-2`}>
+      <View style={tw`flex-1 pt-[45px]`}>
+        <View style={tw`flex-1 min-h-full`}>
           <TouchableOpacity
             onPress={() => {
               // navigation.navigate("TabNavigator", { screen: "ProfileScreen" });
@@ -217,10 +216,14 @@ export default function HomeScreen() {
               />
             </View>
           )}
-          <View style={tw`ios:pb-36 min-h-full h-auto flex-2`}>
-            <FlashList
-              contentContainerStyle={tw`pt-2 px-6 pb-4`}
-              estimatedItemSize={200}
+          {coursesFilter.length === 0 ? (
+            <ThemedText style={tw`text-center font-bold pt-4`}>
+              No course found!
+            </ThemedText>
+          ) : (
+            <FlatList
+              style={tw`flex-1`}
+              contentContainerStyle={tw`py-2 px-6`}
               data={coursesFilter}
               keyExtractor={(item) => item._id}
               showsVerticalScrollIndicator={false}
@@ -237,7 +240,7 @@ export default function HomeScreen() {
                 />
               )}
             />
-          </View>
+          )}
         </View>
       </View>
       <Loader isLoading={loading} />

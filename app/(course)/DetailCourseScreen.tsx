@@ -5,6 +5,7 @@ import {
   ScrollView,
   RefreshControl,
   useColorScheme,
+  FlatList,
 } from "react-native";
 import tw from "twrnc";
 import { Icon, IconButton, Text } from "react-native-paper";
@@ -130,8 +131,8 @@ export default function DetailCourseScreen() {
               )}
             </View>
             {quizs.length !== 0 ? (
-              <FlashList
-                estimatedItemSize={200}
+              <FlatList
+                // estimatedItemSize={200}
                 contentContainerStyle={tw`ios:max-h-65 py-2 pl-2`}
                 data={quizs}
                 keyExtractor={(item) => item._id}
@@ -182,8 +183,8 @@ export default function DetailCourseScreen() {
               )}
             </View>
             {essays.length !== 0 ? (
-              <FlashList
-                estimatedItemSize={200}
+              <FlatList
+                // estimatedItemSize={200}
                 contentContainerStyle={tw`py-2 pl-2`}
                 data={essays}
                 keyExtractor={(item) => item._id}

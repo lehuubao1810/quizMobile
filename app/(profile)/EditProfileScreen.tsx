@@ -119,7 +119,7 @@ export default function EditProfileScreen() {
     <SafeAreaView style={tw`flex-1`}>
       <View style={tw`w-full pl-1 flex-row items-center`}>
         <BtnBack />
-        <ThemedText style={tw`text-lg font-bold`}>Update Profile</ThemedText>
+        <ThemedText style={tw`text-lg font-bold`}>Edit Profile</ThemedText>
       </View>
       <View style={tw`flex items-center h-full px-8`}>
         <EditAvatar selectImage={selectImage} />

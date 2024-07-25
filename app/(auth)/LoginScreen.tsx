@@ -77,10 +77,12 @@ const LoginScreen = () => {
   });
 
   const navigateRegister = useCallback(() => {
+    dispatch(clearError());
     router.push("RegisterScreen");
   }, []);
 
   const navigateForgotPassword = useCallback(() => {
+    dispatch(clearError());
     router.push("ForgotPasswordScreen");
   }, []);
 
@@ -129,12 +131,16 @@ const LoginScreen = () => {
             control={control}
             rules={{
               required: true,
-              pattern: regPassword,
+              minLength: 8,
             }}
             render={({ field: { onChange, value } }) => (
               <InputSection
                 value={value}
-                error={errors.password ? "Password is invalid" : undefined}
+                error={
+                  errors.password
+                    ? "Password must be at least 8 characters"
+                    : undefined
+                }
                 style={tw`mb-2 w-full`}
                 onChangeText={onChange}
                 icon="lock"
@@ -173,9 +179,7 @@ const LoginScreen = () => {
               Don't have an account?
             </ThemedText>
             <TouchableOpacity onPress={!loading ? navigateRegister : () => {}}>
-              <ThemedText style={tw`font-bold text-base underline`}>
-                Register
-              </ThemedText>
+              <ThemedText style={tw`font-bold text-base`}>Register</ThemedText>
             </TouchableOpacity>
           </View>
         </View>

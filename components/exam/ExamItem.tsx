@@ -43,11 +43,11 @@ export const ExamItem: React.FC<Props> = ({ item, action, time }: Props) => {
           {item.course_name && (
             <ThemedText style={tw`text-gray-500`}>{item.course_name}</ThemedText>
           )}
-          {item.status && (
+          {/* {item.status && (
             <View style={tw`flex-row`}>
               <StatusBox status={item.status} />
             </View>
-          )}
+          )} */}
           <ThemedText style={tw`text-sm`}>End: {time}</ThemedText>
         </View>
       </View>

@@ -38,6 +38,7 @@ export default function ForgotPasswordScreen() {
     dispatch(sendOTP(data.email))
       .unwrap()
       .then(() => {
+        dispatch(clearError());
         router.push({
           pathname: "VerificationOtpScreen",
           params: { email: data.email },

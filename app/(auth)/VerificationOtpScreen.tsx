@@ -56,14 +56,11 @@ export default function VerificationOtpScreen() {
     dispatch(verifyOTP({ email, otp }))
       .unwrap()
       .then(() => {
+        dispatch(clearError());
         router.push({
           pathname: "ResetPasswordScreen",
           params: { otp, email },
         });
-      })
-      .catch((error) => {
-        console.log(error);
-        showToast("error", error);
       });
   };
 
@@ -97,15 +94,19 @@ export default function VerificationOtpScreen() {
         </ThemedText>
         <OtpInput
           numberOfDigits={6}
-          focusColor={`${Colors[colorScheme ?? "light"].tabCategory}`}
+          focusColor={`${Colors[colorScheme ?? "light"].btn}`}
           onFilled={(otp) => {
             handleVerifyOTP(otp);
           }}
           theme={{
-            pinCodeTextStyle: tw`text-white font-bold`,
+            pinCodeTextStyle: tw`text-[${
+              Colors[colorScheme ?? "light"].text
+            }] font-bold`,
           }}
         />
-
+        {error && (
+          <Text style={tw`text-red-500 text-sm font-bold text-center mt-2`}>{error}</Text>
+        )}
         <View style={tw`justify-center mt-4 w-full flex-row`}>
           {loading ? (
             <LoadingBtn />
@@ -116,7 +117,9 @@ export default function VerificationOtpScreen() {
           ) : (
             <>
               <ThemedText style={tw`text-base`}>Resend OTP in </ThemedText>
-              <ThemedText style={tw`text-base font-bold`}>{time?.getSeconds()} s</ThemedText>
+              <ThemedText style={tw`text-base font-bold`}>
+                {time?.getSeconds()} s
+              </ThemedText>
             </>
           )}
         </View>

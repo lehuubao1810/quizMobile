@@ -45,11 +45,11 @@ export const ListItem = ({ item, action }: Props) => {
             {item.time && <Text style={tw`text-gray-500`}>{item.time}</Text>}
           </View>
         </View>
-        {item.status && !item.isCourse ? (
+        {/* {item.status && !item.isCourse ? (
           <View style={tw`flex-row justify-end mt-2`}>
             <StatusBox status={item.status} />
           </View>
-        ) : null}
+        ) : null} */}
       </>
     </ThemedCard>
     // </ImageBackground>

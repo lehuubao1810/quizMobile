@@ -1,4 +1,4 @@
-import { RefreshControl, SafeAreaView, View } from "react-native";
+import { RefreshControl, SafeAreaView, View, FlatList } from "react-native";
 import tw from "twrnc";
 import { Text } from "react-native-paper";
 
@@ -54,18 +54,18 @@ export default function StatScreen() {
   };
 
   return (
-    <SafeAreaView style={tw`flex-1`}>
-      <View style={tw`pt-[45px]`}>
-        <ThemedText style={tw`text-xl font-bold text-center mb-4`}>
-          List Completed Exam
-        </ThemedText>
+    <>
+      <SafeAreaView style={tw`flex-1 pt-[45px]`}>
+        <View style={tw`flex-1`}>
+          <ThemedText style={tw`text-xl font-bold text-center mb-4`}>
+            List Completed Exam
+          </ThemedText>
 
-        <View style={tw`flex-2 android:pb-6 ios:pb-36 min-h-full h-auto`}>
-          <FlashList
-            contentContainerStyle={tw`px-6 pb-16`}
+          <FlatList
+            style={tw`flex-1`}
+            contentContainerStyle={tw`px-6 py-2`}
             data={exams}
             showsVerticalScrollIndicator={false}
-            estimatedItemSize={200}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
@@ -84,8 +84,8 @@ export default function StatScreen() {
             )}
           />
         </View>
-      </View>
+      </SafeAreaView>
       <Loader isLoading={loading} />
-    </SafeAreaView>
+    </>
   );
 }

@@ -37,9 +37,9 @@ const LobbyScreen = () => {
         <View style={tw`mb-6`}>
           <Image
             source={
-              //   user?.avatar
-              //     ? { uri: user.avatar }
-              //     :
+                user?.avatar
+                  ? { uri: user.avatar }
+                  :
               require("../../assets/images/avatardefault.png")
             }
             style={tw`w-24 h-24 mx-auto my-2 rounded-full`}

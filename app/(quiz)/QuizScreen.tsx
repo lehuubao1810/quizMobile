@@ -64,7 +64,7 @@ export default function QuizScreen() {
       .unwrap()
       .then(() => {
         // navigation.navigate("ResultQuizScreen");
-        router.push("ResultQuizScreen");
+        router.replace("ResultQuizScreen");
       });
   };
 
@@ -344,6 +344,10 @@ export default function QuizScreen() {
                           ? `text-[${Colors.light.text}]`
                           : `text-[${Colors[colorScheme ?? "light"].text}]`
                       }`}
+                      // enableExperimentalPercentWidth: false,
+                      // computeMaxWidth: identity,
+                      // imagesInitialDimensions: defaultImageInitialDimensions,
+                      // style: {}
                     />
                   </TouchableOpacity>
                 )

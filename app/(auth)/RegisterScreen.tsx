@@ -166,7 +166,7 @@ export default function RegisterScreen() {
             <View style={tw`flex-row mt-8`}>
               <ThemedText style={tw`text-base mr-1`}>Already have an account?</ThemedText>
               <TouchableOpacity onPress={navigateLogin}>
-                <ThemedText style={tw`font-bold text-base underline`}>
+                <ThemedText style={tw`font-bold text-base`}>
                   Login
                 </ThemedText>
               </TouchableOpacity>
